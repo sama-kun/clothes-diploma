@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Palette Style
+{% endblock %}
+
+{% block body %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div id="slides-shop" class="cover-slides" style="height:500px">
+    <ul class="slides-container">
+    <li class="text-left">
+        <img src="{% static 'needs/1.png' %}" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="m-b-20"><strong>Join DesignerMarket: Discover a World of Unique Fashion!</strong></h1>
+                    <p class="m-b-40">Explore exclusive collections from independent designers around the globe on our platform. Unite with talent, support creativity, and buy unique garments directly from the creators.</p>
+                    <p><a class="btn hvr-hover" href="/products">Browse Products</a></p>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="text-left">
+        <img src="{% static 'needs/2.png' %}" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="m-b-20"><strong>Streamline Your Fashion Finds with DesignerMarket.</strong></h1>
+                    <p class="m-b-40">Our platform makes it simple to connect with up-and-coming designers and secure pieces that elevate your style. Experience the convenience of discovering fashion that tells a story.</p>
+                    <p><a class="btn hvr-hover" href="/products">Explore Options</a></p>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+    <div class="slides-navigation">
+        <a href="#" class="next"><i class="fas fa-angle-right" aria-hidden="true"></i></a>
+        <a href="#" class="prev"><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+    </div>
+</div>
+<!-- End Slider -->
+
+<div class="mt-2">
+    <div class="shadow p-2 rounded" style="background-color:#e9ecef; color:black">
+        <div class="container">
+            <div class="row text-center font-weight-bold">
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <p><a href="/products">All products</a></p>
+                </div>
+                {% for category in categories %}
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <p><a href="/products/?category={{category.id}}">{{category.category_name}}</a></p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="products-box" style="padding:30px 0px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>Recommended products</h1>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 special-grid">
+                <div class="products-single fix shadow-sm p-2 bg-white rounded border border-4">
+                    <div class="box-img-hover ctr" style="height:255px;">
+                        <img src="{{product.product_img.url}}" class="img-fluid" alt="Image">
+                    </div>
+                    <div class="why-text text-center font-weight-bold" style="height:155px;">
+                        <h4><a href="/productdetail/{{product.id}}">{{product.product_name}}</a></h4>
+                        <h5> {{product.price|intcomma}} ₸</h5>
+                        <div class="mt-2">
+                            <a href="/addtocart/{{product.id}}" class="btn hvr-hover cart" style="color:white">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+{% endblock %}

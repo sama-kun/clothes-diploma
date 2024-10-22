@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Palette Style{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 my-4 py-4 bg-light shadow rounded">
+            <div class="title-all text-center">
+                <h1>Register to the system</h1>
+            </div>
+            <div>
+                <form id="formRegister" action="/signup/" method="POST">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{message}}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <script>
+                                    $('.alert').alert()
+                                </script>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-12 font-weight-bold">
+                            <label for="email" class="mb-0">E-mail </label>
+                            <input type="email" class="form-control" name="email" value="{{email}}" required>
+                        </div>
+                        <div class="form-group col-md-6 font-weight-bold">
+                            <label for="fname" class="mb-0">First name</label>
+                            <input type="text" class="form-control" name="fname" value="{{fname}}" required>
+                        </div>
+                        <div class="form-group col-md-6 font-weight-bold">
+                            <label for="lname" class="mb-0">Last name</label>
+                            <input type="text" class="form-control" name="lname" value="{{lname}}" required>
+                        </div>
+                        <div class="form-group col-md-12 font-weight-bold">
+                            <label for="phone" class="mb-0">Phone number</label>
+                            <input type="tel" class="form-control" name="phone" value="{{phone}}" required>
+                        </div>
+                        <div class="form-group col-md-12 font-weight-bold">
+                            <label for="pass1" class="mb-0">Password</label>
+                            <input type="password" class="form-control" name="pass1" required>
+                        </div>
+                        <div class="form-group col-md-12 font-weight-bold">
+                            <label for="pass2" class="mb-0">Confirm Password</label>
+                            <input type="password" class="form-control" name="pass2" required>
+                        </div>
+                        <div class="form-group col-md-12 font-weight-bold">
+                            <label for="pass2" class="mb-0">Gender is male</label>
+                            <input type="radio" value="M" class="" name="gender" required><br>
+                            <label for="pass2" class="mb-0">Gender is female</label>
+                            <input type="radio" value="F" class="" name="gender" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input class="mb-0" type="checkbox" value="" id="tnc" required>
+                            <label class="mb-0" for="tnc">
+                                I agree to the terms of use and privacy policy
+                            </label>
+                        </div>
+                    </div>
+                    <div class="text-center mt-2">
+                        <button type="submit" class="btn hvr-hover col-lg-4" style="color:white;">Register</button>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center mt-2">
+                <p><strong>Do you have an account?</strong></p>
+            </div>
+            <div class="text-center mt-2">
+                <a href="/login" class="btn hvr-hover col-lg-6" style="color:white;">Login</a>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+{% endblock %}

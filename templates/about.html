@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Patette Style
+{% endblock %}
+
+{% block body %}
+
+<div class="shadow p-2 rounded" style="background-color:#e9ecef; color:black">
+    <div class="row text-center font-weight-bold">
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <p><a href="/products">ALL Products</a></p>
+        </div>
+        {% for category in categories %}
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <p><a href="/products/?category={{category.id}}">{{category.category_name}}</a></p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="about-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2 class="noo-sh-title">About US<span></span></h2>
+                <p>
+                    Welcome to Palette Style – The Home of Independent Fashion
+                </p>
+                <p>
+                    Our mission is to revolutionize the fashion industry by promoting sustainability and diversity. We strive to create a community where independent designers can thrive, gain recognition, and reach customers worldwide who value craftsmanship and innovative design. Palette Style is more than just a marketplace; it’s a movement towards a more inclusive and environmentally conscious fashion future.
+                </p>
+                <p>
+                    Palette Style offers an extensive range of unique clothing and accessories, all crafted with love and exceptional care by independent artists. From haute couture to ready-to-wear, our platform ensures that every piece you purchase makes a statement while supporting the creative industry.
+                </p>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="banner-frame"> <img class="img-thumbnail img-fluid" src="{% static 'images/2.png' %}" alt="" width="540px"/>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}
