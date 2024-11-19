@@ -24,3 +24,10 @@ a.hvrcolor:hover, a.hvrcolor:active {
     margin-right: auto;
 }
 
+.custom-btn {
+    background-color: black;
+}
+
+.custom-btn:hover {
+    background-color: rgb(54, 53, 53);
+}
