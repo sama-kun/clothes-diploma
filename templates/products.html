@@ -1,14 +1,124 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% load humanize %}
 
 {% block title %}
-Palette Style
+Product Listing
 {% endblock %}
-
 {% block body %}
+<style>
+    .row-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Расстояние между карточками */
+}
 
+.col-lg-3,
+.col-md-6 {
+    flex: 1 1 calc(25% - 20px); /* Занимает 25% ширины с учетом отступов */
+    max-width: calc(25% - 20px);
+}
+
+.custom-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent; /* Без бордера по умолчанию */
+    transition: transform 0.3s ease, border 0.3s ease, height 0.3s ease;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-card:hover {
+    transform: scale(1.05); /* Увеличение карточки при ховере */
+    z-index: 1; /* Поверх других карточек */
+    border: 1px solid black; /* Черный бордер при ховере */
+    position:absolute;
+}
+
+/* Главное изображение */
+.box-img-hover {
+    position: relative;
+    overflow: hidden;
+    height: auto; /* Высота блока главного изображения */
+}
+
+.main-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Заполнить блок полностью, сохраняя пропорции */
+    transition: transform 0.3s ease;
+}
+
+.custom-card:hover .main-img {
+    transform: scale(1.1); /* Увеличение основного фото при ховере */
+}
+
+/* Дополнительные изображения */
+.additional-images {
+    display: flex;
+    justify-content: left;
+    gap: 5px;
+    height: 0; /* Скрытые дополнительные изображения */
+    opacity: 0; /* Скрытые до ховера */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease;
+}
+
+.custom-card:hover .additional-images {
+    opacity: 1; /* Показать дополнительные фото при ховере */
+    visibility: visible;
+    height: auto; /* Разрешить место для дополнительных фото */
+}
+
+.additional-img {
+    width: 30%;
+    height: auto;
+    object-fit: cover; /* Масштабирование миниатюр */
+    transition: transform 0.3s ease;
+}
+
+.additional-img:hover {
+    transform: scale(1.1); /* Увеличение миниатюр при ховере */
+}
+
+/* Текстовая информация */
+.product-info {
+    padding: 10px 0;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-info h4,
+.product-info h5,
+.product-info p {
+    margin: 5px 0;
+}
+
+.product-info h4 a {
+    text-decoration: none;
+    color: black;
+}
+
+.product-info h4 a:hover {
+    text-decoration: underline;
+}
+
+.btn.cart {
+    background-color: #000;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.btn.cart:hover {
+    background-color: #444;
+}
+</style>
+<!-- Category Filter -->
 <div class="shadow p-2 rounded" style="background-color:#e9ecef; color:black">
     <div class="row text-center font-weight-bold">
         <div class="col-lg-2">
@@ -22,10 +132,11 @@ Palette Style
     </div>
 </div>
 
+<!-- Messages -->
 {% if messages %}
     {% for message in messages %}
         <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-            {{message}}
+            {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="fas fa-times"></i>
             </button>
@@ -37,52 +148,53 @@ Palette Style
     <div class="container">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
-                {% if filtered_category %}
                 <div class="title-all text-center">
-                    <h1 class="text-center">{{filtered_category}}</h1>
+                    <h1 class="text-center">{{ product_title }}</h1>
                 </div>
-                {% else %}
-                <div class="title-all text-center">
-                    <h1 class="text-center">All products</h1>
-                </div>
-                {% endif %}
-                <div class="product-item-filter row">
-                    <div class="col-12 col-sm-10 text-center text-sm-left">
-                        <div class="toolbar-sorter-right">
-                            <p>found {{n}} product(s)</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-2 text-center text-sm-right">
-                        <ul class="nav nav-tabs ml-auto">
-                            <li>
-                                <a class="nav-link active" href="#grid-view" data-toggle="tab"> <i class="fas fa-th"></i> </a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="#list-view" data-toggle="tab"> <i class="fas fa-list-ul"></i> </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row product-categorie-box">
+                
+                <!-- Sorting and Price Filter -->
+                <form method="get" class="form-inline justify-content-center mb-4">
+    <!-- Price Range Slider -->
+    <label for="price-range" class="mr-2">Filter by Price: </label>
+    <div id="price-slider" class="w-50"></div>
+    <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
+    <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
+    <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
+    <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
+    <button type="submit" class="btn btn-primary ml-2">Apply Filter</button>
+
+    <!-- Hidden field for category -->
+    <input type="hidden" name="category" value="{{ categoryid }}">
+
+    <!-- Sorting Dropdown -->
+    <select name="sort_by" class="form-control ml-3" onchange="this.form.submit()">
+        <option value="">Sort By</option>
+        <option value="price_asc" {% if request.GET.sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+        <option value="name_asc" {% if request.GET.sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+        <option value="name_desc" {% if request.GET.sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+    </select>
+</form>
+                <!-- <div class="row product-categorie-box">
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
                             <div class="row">
                                 {% for product in products %}
-                                <div class="col-lg-3 col-md-6 special-grid ">
+                                <div class="col-lg-3 col-md-6 special-grid">
                                     <div class="products-single fix shadow-sm p-2 bg-white rounded">
-                                        <a href="/productdetail/{{product.id}}">
-                                        <div class="box-img-hover ctr" style="height:255px;">
-                                            <div class="type-lb">
-                                                <p class="sale">{{product.tag}}</p>
+                                        <a href="/productdetail/{{ product.id }}">
+                                            <div class="box-img-hover ctr" style="height:255px;">
+                                                <div class="type-lb">
+                                                    <p class="sale">{{ product.tag }}</p>
+                                                </div>
+                                                <img src="{{ product.product_img.url }}" class="img-fluid" alt="Image">
                                             </div>
-                                            <img src="{{product.product_img.url}}" class="img-fluid" alt="Image">
-                                            <div class="mask-icon"></div>
-                                        </div></a>
+                                        </a>
                                         <div class="why-text text-center" style="height:155px;">
-                                            <h4><a href="/productdetail/{{product.id}}">{{product.product_name}}</a></h4>
-                                            <h5> {{product.price|intcomma}} ₸</h5>
+                                            <h4><a href="/productdetail/{{ product.id }}">{{ product.product_name }}</a></h4>
+                                            <h5>{{ product.price|intcomma }} ₸</h5>
                                             <div class="mt-2">
-                                                <a href="/addtocart/{{product.id}}" class="btn hvr-hover cart" style="color:white">Add to cart</a>
+                                                <a href="/addtocart/{{ product.id }}" class="btn hvr-hover cart" style="color:white">Add to cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -90,44 +202,73 @@ Palette Style
                                 {% endfor %}
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="list-view">
-                            {% for product in products %}
-                            <div class="list-view-box products-single shadow-sm">
-                                <div class="row">
-                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                                        <div class="fix shadow p-2 bg-white rounded">
-                                            <div class="box-img-hover ctr" style="height:255px;">
-                                                <div class="type-lb">
-                                                    <p class="new">{{product.tag}}</p>
-                                                </div>
-                                                <img src="{{product.product_img.url}}" class="img-fluid" alt="Image">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
-                                        <div class="why-text full-width list-product">
-                                            <h4>{{product.product_name}}</h4>
-                                            <h5> {{product.price|intcomma}} ₸</h5>
-                                            <ol class="my-2">
-                                                <li><strong>Brand : {{product.brand}}</strong></li>
-                                                <li><strong>Category : {{product.category.category_name}}</strong></li>
-                                                <li></li>
-                                                <li></li>
-                                            </ol>
-                                            <a class="btn hvr-hover my-2" href="/productdetail/{{product.id}}">View product</a><br>
-                                            <a href="/buynow/{{product.id}}" class="btn hvr-hover cart" style="color:white">Bye now</a>
-                                            <a class="btn hvr-hover" href="/addtocart/{{product.id}}">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
                     </div>
-                </div>
+                </div> -->
+<div class="row-card">
+    {% for product in products %}
+    <div class="col-lg-3 col-md-6 special-grid">
+        <div class="products-single fix p-2 bg-white rounded custom-card">
+            <!-- Главное изображение -->
+            <div class="box-img-hover">
+                <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
+            </div>
+            <!-- Дополнительные изображения -->
+            <div class="additional-images">
+                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
+                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
+                <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
+                <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
+            </div>
+            <!-- Информация о продукте -->
+            <div class="product-info font-weight-bold text-left">
+                <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
+                <h3><b>{{ product.price|intcomma }} ₸</b></h3>
+                <p>
+                    <strong>Gender:</strong> {{ product.gender }} <br>
+                    <strong>Category:</strong> {{ product.category }} <br>
+                    <strong>Sizes Available:</strong> {{ product.sizes|length }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+                <p class="text-center">Found {{ n }} product(s)</p>
             </div>
         </div>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var slider = document.getElementById('price-slider');
+    if (!slider) return;
 
+    noUiSlider.create(slider, {
+        start: [{{ min_selected_price|default:"0" }}, {{ max_selected_price|default:"10000" }}],
+        connect: true,
+        range: {
+            'min': {{ min_price|default:"0" }},
+            'max': {{ max_price|default:"10000" }}
+        },
+        step: 10,
+        tooltips: [true, true],
+        format: {
+            to: function (value) { return Math.round(value); },
+            from: function (value) { return Number(value); }
+        }
+    });
+
+    slider.noUiSlider.on('update', function(values) {
+        document.getElementById('price-min-output').innerText = values[0] + " ₸";
+        document.getElementById('price-max-output').innerText = values[1] + " ₸";
+        document.getElementById('min_price_input').value = values[0];
+        document.getElementById('max_price_input').value = values[1];
+    });
+    
+    slider.noUiSlider.on('change', function(values) {
+        // После изменения значений, отправьте форму
+        // document.querySelector("form").submit();
+    });
+});
+</script>
 {% endblock %}

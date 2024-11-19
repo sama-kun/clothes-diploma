@@ -29,6 +29,7 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderProduct, OrderProductAdmin)
 admin.site.register(Review)
 admin.site.register(Wishlist)
+admin.site.register(Size)
 
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('get_full_name', 'position', 'start_date', 'end_date', 'salary', 'is_active')

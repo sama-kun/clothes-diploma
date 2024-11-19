@@ -37,6 +37,14 @@ TAG = (
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
+
+class Size(models.Model):
+    size_label = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.size_label
+
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -51,6 +59,7 @@ class Product(models.Model):
     product_img2 = models.ImageField(upload_to="images", default="product.jpg")
     file = models.FileField(upload_to='file', null=True, blank=True)
     is_free = models.BooleanField(default=False)
+    sizes = models.ManyToManyField(Size, related_name="products")
 
     def __str__(self):
         return self.product_name
@@ -67,6 +76,7 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     qty = models.IntegerField()
+    size = models.ForeignKey(Size, on_delete=models.SET_NULL, null=True)
 
     @property
     def price(self):

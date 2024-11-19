@@ -43,9 +43,9 @@ class Signup(View):
         if not fname.isalpha() or not lname.isalpha():
             messages.warning(request,"Name must contain only letters.")
             return render(request, 'signup.html', values)
-        if len(str(phone))!=10:
-            messages.warning(request,"Phone number must contain 10 digits.")
-            return render(request, 'signup.html', values)
+        # if len(str(phone))!=10:
+        #     messages.warning(request,"Phone number must contain 10 digits.")
+        #     return render(request, 'signup.html', values)
         if len(pass1)<5:
             messages.warning(request, "Password too short!!! It must have atleast 5 characters.")
             return render(request, 'signup.html', values)
@@ -61,6 +61,8 @@ class Signup(View):
             last_name=lname.capitalize(),
             )
         new_user.save()
+
+        print('new', new_user.password)
 
         customer = Customer(
             user=new_user,

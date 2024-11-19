@@ -429,6 +429,10 @@ ul.cart-list>li.total>.btn {
     }
 }
 
+img {
+    background: transparent;
+}
+
 @media (max-width: 992px) {
     /* Navbar General ------*/
     nav.navbar .navbar-brand {

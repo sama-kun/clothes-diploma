@@ -18,6 +18,11 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js"></script>
+
 
 	<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 	<link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
@@ -27,6 +32,113 @@
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <style> 
+        .navbar-categories {
+        /* background-color: #fff; */
+        border-bottom: 1px solid #ddd;
+        font-family: Arial, sans-serif;
+        position: relative;
+        z-index: 10;
+        /* display: flex;
+        justify-content: center; */
+        }
+
+        .navbar-menu {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        }
+
+        .navbar-item {
+        position: relative;
+        }
+
+        .navbar-link {
+        display: block;
+        padding: 15px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        color: #333;
+        text-transform: uppercase;
+        }
+
+        .navbar-link:hover {
+        background-color: #f5f5f5;
+        }
+
+        /* Dropdown styling */
+        .dropdown-categories {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vw; /* Full width */
+        background-color: #fff;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+        border-top: 1px solid #ddd;
+        padding: 20px 0;
+        z-index: 100;
+        }
+
+        .navbar-item:hover .dropdown-categories {
+        display: flex;
+        }
+
+        /* Dropdown sections */
+        .dropdown-section {
+        padding: 0 20px;
+        flex: 1;
+        }
+
+        .dropdown-section strong {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #000;
+        }
+
+        .dropdown-section ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+
+        .dropdown-section ul li {
+        margin-bottom: 5px;
+        }
+
+        .dropdown-section ul li a {
+        color: #555;
+        text-decoration: none;
+        }
+
+        .dropdown-section ul li a:hover {
+        text-decoration: underline;
+        }
+
+        /* Divider between sections */
+        .dropdown-divider {
+        width: 1px;
+        /* background-color: #ddd; */
+        height: 100%;
+        margin: 0 10px;
+        }
+
+        /* Dropdown layout */
+        .dropdown-categories {
+        display: none;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        }
+
+        .navbar-item:hover .dropdown {
+        display: flex;
+        align-items: flex-start;
+        }
+    </style>
 
 </head>
 
@@ -39,7 +151,7 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <a class="navbar-brand" href="/"><img src="{% static 'images/logo.png' %}" width="184 px"/></a>
+                    <a class="navbar-brand" href="/"><img src="{% static 'images/logo1.png' %}" width="184 px" style="background: transparent;"/></a>
                 </div>
                 <div class="collapse navbar-collapse bg-light col-lg-9 col-md-7" id="navbar-menu">
                     <div class="col-lg-6">
@@ -90,7 +202,7 @@
                                     <span>Cart ({{qty}})</span>
                                    
                                 </a>
-                                <ul class="dropdown-menu cart-item" role="menu">
+                                <ul class="dropdown-menu cart-item" style="z-index: 10000;" role="menu">
                                     {% if carts %}
                                     {% for cart in carts %}
                                     <li class="nav-item">
@@ -150,6 +262,47 @@
                 </div>
 			</div>
 		</nav>
+<nav class="navbar-categories">
+  <ul class="navbar-menu">
+    <li class="navbar-item">
+      <a href="#" class="navbar-link">Men</a>
+      <div class="dropdown-categories">
+        <div class="dropdown-section">
+          <strong>New & Trending</strong>
+          <ul>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Trending</a></li>
+            <li><a href="#">Sale</a></li>
+            <li><a href="#">Featured</a></li>
+          </ul>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-section">
+          <strong>Shoes</strong>
+          <ul>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Running</a></li>
+            <li><a href="#">Soccer</a></li>
+            <li><a href="#">Basketball</a></li>
+          </ul>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-section">
+          <strong>Clothing</strong>
+          <ul>
+            <li><a href="#">Hoodies & Sweatshirts</a></li>
+            <li><a href="#">Pants</a></li>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Shorts</a></li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Women</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Kids</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Trending</a></li>
+  </ul>
+</nav>
 	</header>
 
     {% block body %}
