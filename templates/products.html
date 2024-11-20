@@ -117,33 +117,112 @@ Product Listing
 .btn.cart:hover {
     background-color: #444;
 }
+/* Основной контейнер для фильтров */
+.shop-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* Секция фильтров */
+.filter-section {
+    width: 400px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 150px;
+    left: 0;
+    margin-left: -200px;
+    height: fit-content;
+}
+
+/* Секция с товарами */
+.products-section {
+    flex: 1;
+    margin-right: -200px;
+}
+
+/* Заголовок фильтров */
+.filter-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+/* Группа фильтров */
+.filter-group {
+    margin-bottom: 20px;
+}
+
+/* Стили для лейблов */
+.filter-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Стили для радио кнопок */
+.sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sort-option {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание элементов */
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 8px; /* Добавлено расстояние между кнопками */
+}
+
+.sort-option input[type="radio"] {
+    accent-color: #000; /* Черный цвет для радиокнопок */
+    width: 18px; /* Увеличенный размер радиокнопки */
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #000;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    vertical-align: middle;;
+}
+
+.sort-option input[type="radio"]:checked {
+    background-color: #000;
+    transform: scale(1.2);
+}
+
+.option-text {
+    font-size: 1rem;
+    color: #000;
+    line-height: 1.2; /* Убедитесь, что текст выравнивается с кнопкой */
+}
+
+
+.option-text:hover {
+    color: #444; /* Цвет при наведении */
+}
+
+/* Стили для кнопки применения фильтров */
+.apply-filters {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-filters:hover {
+    background-color: #444;
+}
 </style>
 <!-- Category Filter -->
-<div class="shadow p-2 rounded" style="background-color:#e9ecef; color:black">
-    <div class="row text-center font-weight-bold">
-        <div class="col-lg-2">
-            <p><a href="/products">All products</a></p>
-        </div>
-        {% for category in categories %}
-        <div class="col-lg-2">
-            <p><a href="?category={{category.id}}">{{category.category_name}}</a></p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Messages -->
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    {% endfor %}
-{% endif %}
-
 <div class="shop-box-inner">
     <div class="container">
         <div class="row">
@@ -151,89 +230,106 @@ Product Listing
                 <div class="title-all text-center">
                     <h1 class="text-center">{{ product_title }}</h1>
                 </div>
-                
-                <!-- Sorting and Price Filter -->
-                <form method="get" class="form-inline justify-content-center mb-4">
-    <!-- Price Range Slider -->
-    <label for="price-range" class="mr-2">Filter by Price: </label>
-    <div id="price-slider" class="w-50"></div>
-    <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
-    <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
-    <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
-    <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
-    <button type="submit" class="btn btn-primary ml-2">Apply Filter</button>
 
-    <!-- Hidden field for category -->
-    <input type="hidden" name="category" value="{{ categoryid }}">
+                <div class="shop-container">
+                    <!-- Фильтры -->
+                    <div class="filter-section">
+                        <div class="filter-title"> <b>Filters</b></div>
 
-    <!-- Sorting Dropdown -->
-    <select name="sort_by" class="form-control ml-3" onchange="this.form.submit()">
-        <option value="">Sort By</option>
-        <option value="price_asc" {% if request.GET.sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-        <option value="name_asc" {% if request.GET.sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
-        <option value="name_desc" {% if request.GET.sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
-    </select>
-</form>
-                <!-- <div class="row product-categorie-box">
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
-                            <div class="row">
-                                {% for product in products %}
-                                <div class="col-lg-3 col-md-6 special-grid">
-                                    <div class="products-single fix shadow-sm p-2 bg-white rounded">
-                                        <a href="/productdetail/{{ product.id }}">
-                                            <div class="box-img-hover ctr" style="height:255px;">
-                                                <div class="type-lb">
-                                                    <p class="sale">{{ product.tag }}</p>
-                                                </div>
-                                                <img src="{{ product.product_img.url }}" class="img-fluid" alt="Image">
-                                            </div>
-                                        </a>
-                                        <div class="why-text text-center" style="height:155px;">
-                                            <h4><a href="/productdetail/{{ product.id }}">{{ product.product_name }}</a></h4>
-                                            <h5>{{ product.price|intcomma }} ₸</h5>
-                                            <div class="mt-2">
-                                                <a href="/addtocart/{{ product.id }}" class="btn hvr-hover cart" style="color:white">Add to cart</a>
-                                            </div>
-                                        </div>
+                        <form method="get" class="form-inline mb-4">
+                            <div class="filter-group">
+                                <label class="filter-label">Sort by</label>
+                                <div class="sort-options">
+                                    <label class="sort-option">
+                                        <input type="radio" name="sort_by" value="price_asc" {% if request.GET.sort_by == 'price_asc' %}checked{% endif %} onchange="this.form.submit()">
+                                        <span class="option-text">Price: Low to High</span>
+                                    </label>
+                                    <label class="sort-option">
+                                        <input type="radio" name="sort_by" value="price_desc" {% if request.GET.sort_by == 'price_desc' %}checked{% endif %} onchange="this.form.submit()">
+                                        <span class="option-text">Price: High to Low</span>
+                                    </label>
+                                    <label class="sort-option">
+                                        <input type="radio" name="sort_by" value="name_asc" {% if request.GET.sort_by == 'name_asc' %}checked{% endif %} onchange="this.form.submit()">
+                                        <span class="option-text">Name: A to Z</span>
+                                    </label>
+                                    <label class="sort-option">
+                                        <input type="radio" name="sort_by" value="name_desc" {% if request.GET.sort_by == 'name_desc' %}checked{% endif %} onchange="this.form.submit()">
+                                        <span class="option-text">Name: Z to A</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label class="filter-label">Sort by Price of range</label>
+                                <div id="price-slider" class="w-50"></div>
+                                <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
+                                <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
+                                <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
+                                <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
+                            </div>
+                        </form>
+
+
+
+                        <!-- Кнопка применения фильтров -->
+                        <button type="submit" class="apply-filters">Apply Filters</button>
+                    </div>
+
+                    <!-- Список товаров -->
+                    <div class="products-section">
+                        <div class="row-card">
+                            {% for product in products %}
+                            <div class="col-lg-3 col-md-6 special-grid">
+                                <div class="products-single fix p-2 bg-white rounded custom-card">
+                                    <!-- Главное изображение -->
+                                    <div class="box-img-hover">
+                                        <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
+                                    </div>
+                                    <!-- Дополнительные изображения -->
+                                    <div class="additional-images">
+                                        <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
+                                        <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
+                                    </div>
+                                    <!-- Информация о продукте -->
+                                    <div class="product-info font-weight-bold text-left">
+                                        <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
+                                        <h3><b>{{ product.price|intcomma }} ₸</b></h3>
+                                        <p>
+                                            <strong>Gender:</strong> {{ product.gender }} <br>
+                                            <strong>Category:</strong> {{ product.category }} <br>
+                                            <strong>Sizes Available:</strong> {{ product.sizes|length }}
+                                        </p>
                                     </div>
                                 </div>
-                                {% endfor %}
                             </div>
+                            <div class="col-lg-3 col-md-6 special-grid">
+                                <div class="products-single fix p-2 bg-white rounded custom-card">
+                                    <!-- Главное изображение -->
+                                    <div class="box-img-hover">
+                                        <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
+                                    </div>
+                                    <!-- Дополнительные изображения -->
+                                    <div class="additional-images">
+                                        <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
+                                        <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
+                                    </div>
+                                    <!-- Информация о продукте -->
+                                    <div class="product-info font-weight-bold text-left">
+                                        <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
+                                        <h3><b>{{ product.price|intcomma }} ₸</b></h3>
+                                        <p>
+                                            <strong>Gender:</strong> {{ product.gender }} <br>
+                                            <strong>Category:</strong> {{ product.category }} <br>
+                                            <strong>Sizes Available:</strong> {{ product.sizes|length }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
+                        <p class="text-center">Found {{ n }} product(s)</p>
                     </div>
-                </div> -->
-<div class="row-card">
-    {% for product in products %}
-    <div class="col-lg-3 col-md-6 special-grid">
-        <div class="products-single fix p-2 bg-white rounded custom-card">
-            <!-- Главное изображение -->
-            <div class="box-img-hover">
-                <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
-            </div>
-            <!-- Дополнительные изображения -->
-            <div class="additional-images">
-                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
-                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
-                <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
-                <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
-            </div>
-            <!-- Информация о продукте -->
-            <div class="product-info font-weight-bold text-left">
-                <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
-                <h3><b>{{ product.price|intcomma }} ₸</b></h3>
-                <p>
-                    <strong>Gender:</strong> {{ product.gender }} <br>
-                    <strong>Category:</strong> {{ product.category }} <br>
-                    <strong>Sizes Available:</strong> {{ product.sizes|length }}
-                </p>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-                <p class="text-center">Found {{ n }} product(s)</p>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,22 @@
+<form method="get" class="form-inline justify-content-center mb-4">
+    <!-- Price Range Slider -->
+    <label for="price-range" class="mr-2">Filter by Price: </label>
+    <div id="price-slider" class="w-50"></div>
+    <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
+    <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
+    <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
+    <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
+    <button type="submit" class="btn btn-primary ml-2">Apply Filter</button>
+
+    <!-- Hidden field for category -->
+    <input type="hidden" name="category" value="{{ categoryid }}">
+
+    <!-- Sorting Dropdown -->
+    <select name="sort_by" class="form-control ml-3" onchange="this.form.submit()">
+        <option value="">Sort By</option>
+        <option value="price_asc" {% if request.GET.sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+        <option value="name_asc" {% if request.GET.sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+        <option value="name_desc" {% if request.GET.sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+    </select>
+</form>
