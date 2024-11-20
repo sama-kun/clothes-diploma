@@ -221,6 +221,10 @@ Product Listing
 .apply-filters:hover {
     background-color: #444;
 }
+
+.price-sort {
+    padding-bottom: 50px;
+}
 </style>
 <!-- Category Filter -->
 <div class="shop-box-inner">
@@ -236,7 +240,7 @@ Product Listing
                     <div class="filter-section">
                         <div class="filter-title"> <b>Filters</b></div>
 
-                        <form method="get" class="form-inline mb-4">
+                        <form method="get" class=" mb-4">
                             <div class="filter-group">
                                 <label class="filter-label">Sort by</label>
                                 <div class="sort-options">
@@ -260,48 +264,27 @@ Product Listing
                             </div>
 
                             <div class="filter-group">
-                                <label class="filter-label">Sort by Price of range</label>
+                                <label class="filter-label price-sort">Sort by Price of range</label>
                                 <div id="price-slider" class="w-50"></div>
                                 <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
                                 <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
                                 <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
                                 <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
                             </div>
+
+                             <button type="submit" class="apply-filters">Apply Filters</button>
                         </form>
 
 
 
                         <!-- Кнопка применения фильтров -->
-                        <button type="submit" class="apply-filters">Apply Filters</button>
+                       
                     </div>
 
                     <!-- Список товаров -->
                     <div class="products-section">
                         <div class="row-card">
                             {% for product in products %}
-                            <div class="col-lg-3 col-md-6 special-grid">
-                                <div class="products-single fix p-2 bg-white rounded custom-card">
-                                    <!-- Главное изображение -->
-                                    <div class="box-img-hover">
-                                        <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
-                                    </div>
-                                    <!-- Дополнительные изображения -->
-                                    <div class="additional-images">
-                                        <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
-                                        <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
-                                    </div>
-                                    <!-- Информация о продукте -->
-                                    <div class="product-info font-weight-bold text-left">
-                                        <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
-                                        <h3><b>{{ product.price|intcomma }} ₸</b></h3>
-                                        <p>
-                                            <strong>Gender:</strong> {{ product.gender }} <br>
-                                            <strong>Category:</strong> {{ product.category }} <br>
-                                            <strong>Sizes Available:</strong> {{ product.sizes|length }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-lg-3 col-md-6 special-grid">
                                 <div class="products-single fix p-2 bg-white rounded custom-card">
                                     <!-- Главное изображение -->

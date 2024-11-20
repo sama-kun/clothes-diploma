@@ -31,7 +31,7 @@ def addtocart(request, prid, sizeId):
 def deletefromcart(request, prid, sizeId):
     url = request.META.get('HTTP_REFERER')
     current_user = request.user
-    product = Cart.objects.get(user_id=current_user.id, product_id=prid, size_id = sizeId)
+    product = Cart.objects.get(user_id=current_user.id, product_id=prid, size__size_label = sizeId)
         
     if product.qty == 1:
         product.delete()
@@ -44,7 +44,7 @@ def deletefromcart(request, prid, sizeId):
 
 def deleteallfromcart(request, prid, sizeId):
     current_user = request.user
-    Cart.objects.get(product_id=prid, user_id=current_user.id, size__label_name=sizeId).delete()
+    Cart.objects.get(product_id=prid, user_id=current_user.id, size__size_label=sizeId).delete()
     return HttpResponseRedirect('/cart')
 
 def clearcart(request):

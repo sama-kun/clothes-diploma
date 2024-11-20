@@ -35,6 +35,7 @@ CaféVue
                             <tr class="text-center">
                                 <th>Photo</th>
                                 <th>Name</th>
+                                <th>Size</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
@@ -55,14 +56,17 @@ CaféVue
                                     </a>
                                 </td>
                                 <td class="price-pr text-center">
+                                    <p> {{cart.size.size_label}}</p>
+                                </td>
+                                <td class="price-pr text-center">
                                     <p> {{cart.price|floatformat:2|intcomma}} ₸</p>
                                 </td>
                                 <td class="quantity-box text-center">
                                     <p>
-                                        <a class="btn hvr-hover mr-2" href="/deletefromcart/{{cart.product.id}}" style="color:white;">
+                                        <a class="btn hvr-hover mr-2" href="/deletefromcart/{{cart.product.id}}/{{cart.size.size_label}}" style="color:white;">
                                         <i class="fas fa-minus"></i></a>
                                         {{cart.qty}}
-                                        <a class="btn hvr-hover ml-2" href="/addtocart/{{cart.product.id}}" style="color:white;">
+                                        <a class="btn hvr-hover ml-2" href="/addtocart/{{cart.product.id}}/{{cart.size.size_label}}" style="color:white;">
                                         <i class="fas fa-plus"></i></a>
                                     </p>
                                 </td>
@@ -70,7 +74,7 @@ CaféVue
                                     <p> {{cart.amount|floatformat:2|intcomma}} ₸</p>
                                 </td>
                                 <td class="remove-pr">
-                                    <a href="/deleteallfromcart/{{cart.product.id}}" class="nav-link"><i class="fas fa-trash"></i>
+                                    <a href="/deleteallfromcart/{{cart.product.id}}/{{cart.size.size_label}}" class="nav-link"><i class="fas fa-trash"></i>
                                 </td>
                             </tr>
                             {% endfor %}
