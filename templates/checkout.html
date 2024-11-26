@@ -55,7 +55,7 @@ Palette Style
                         <div class="title-left">
                             <h3>Buyer details</h3>
                         </div>
-                        <form class="needs-validation" action='/checkout/' method="POST" >
+                        <form class="needs-validation" action='/payment/' method="POST" >
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -94,73 +94,126 @@ Palette Style
                                     <input type="tel" class="form-control" name="pin" value="{{customer.pin}}" placeholder="" required>
                                 </div>
                             </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-6 mb-3">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                            <div class="shipping-method-box">
-                                <div class="title-left">
-                                    <h3>Payment</h3>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="d-block my-3">
-                                        <div class="custom-control custom-radio">
-                                            <input name="credit" name="paymentMethod" type="radio" class="custom-control-input">
-                                            <label class="custom-control-label" for="credit">Credit card</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input name="debit" name="paymentMethod" type="radio" class="custom-control-input">
-                                            <label class="custom-control-label" for="debit">Debit card</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input name="paypal" name="paymentMethod" type="radio" class="custom-control-input">
-                                            <label class="custom-control-label" for="paypal">Paypal</label>
-                                        </div>
+                    <form id="payment-form">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="shipping-method-box">
+                                    <div class="title-left">
+                                        <h3>Payment</h3>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="cc-name">Name on the card</label>
-                                            <input type="text" class="form-control" name="cc-name" placeholder="" > <small class="text-muted">The full name is shown on the map</small>
-                                            <div class="invalid-feedback">Must be filled </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="cc-number">Card number</label>
-                                            <input type="text" class="form-control" name="cc-number" placeholder="" >
-                                            <div class="invalid-feedback"> Must be filled</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3 mb-3">
-                                            <label for="cc-expiration">Expiry date</label>
-                                            <input type="text" class="form-control" name="cc-expiration" placeholder="" >
-                                            <div class="invalid-feedback"> Must be filled </div>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label for="cc-expiration">CVV</label>
-                                            <input type="text" class="form-control" name="cc-cvv" placeholder="" >
-                                            <div class="invalid-feedback"> Must be filled</div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <div class="payment-icon">
-                                                <ul>
-                                                    <li><img width="51px" height="31px" src="{% static 'images/payment-icon/1.png' %}" alt=""></li>
-                                                    <li><img width="51px" height="31px" src="{% static 'images/payment-icon/2.png' %}" alt=""></li>
-                                                    <li><img width="51px" height="31px" src="{% static 'images/payment-icon/3.png' %}" alt=""></li>
-                                                    <li><img width="51px" height="31px" src="{% static 'images/payment-icon/5.png' %}" alt=""></li>
-                                                    <li><img width="51px" height="31px" src="{% static 'images/payment-icon/7.png' %}" alt=""></li>
-                                                </ul>
+                                    <div class="mb-4">
+                                        <div class="d-block my-3">
+                                            <div class="custom-control custom-radio">
+                                                <input id="credit" name="paymentMethod" value="credit" type="radio" class="custom-control-input">
+                                                <label class="custom-control-label" for="credit">Credit card</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input id="debit" name="paymentMethod" value="debit" type="radio" class="custom-control-input">
+                                                <label class="custom-control-label" for="debit">Debit card</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input id="paypal" name="paymentMethod" value="paypal" type="radio" class="custom-control-input">
+                                                <label class="custom-control-label" for="paypal">Paypal</label>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cc-name">Name on the card</label>
+                                                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="">
+                                                <small class="text-muted">The full name as shown on the card</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cc-number">Card number</label>
+                                                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 mb-3">
+                                                <label for="cc-expiration">Expiry date</label>
+                                                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="">
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label for="cc-cvv">CVV</label>
+                                                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="payment-icon">
+                                                    <ul>
+                                                        <li><img width="51px" height="31px" src="{% static 'images/payment-icon/1.png' %}" alt=""></li>
+                                                        <li><img width="51px" height="31px" src="{% static 'images/payment-icon/2.png' %}" alt=""></li>
+                                                        <li><img width="51px" height="31px" src="{% static 'images/payment-icon/3.png' %}" alt=""></li>
+                                                        <li><img width="51px" height="31px" src="{% static 'images/payment-icon/5.png' %}" alt=""></li>
+                                                        <li><img width="51px" height="31px" src="{% static 'images/payment-icon/7.png' %}" alt=""></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="shopping-box text-center">
+                                        <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                                        <button class="btn btn-primary btn-block mt-3" id="submit-button">Pay</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
-            <div class="shopping-box text-center"> <button type="submit" class="ml-auto btn hvr-hover" style="color:white">Place an order</button> </div>
+            <!-- <div class="shopping-box text-center"> <button type="submit" class="ml-auto btn hvr-hover" style="color:white">Place an order</button> </div> -->
         </div>
     </div>
 </div>
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    // Initialize Stripe with your public key
+    const stripe = Stripe("pk_test_51MiaNMF9AyD8ZSBF7B3nokCo2nTp3cyLnDh13z6pQvtmV4N5xmt7xrdRDr80iR87y0wTOST8B7JiY7GOnFzEyHy100X37gzl9q");
+        const elements = stripe.elements();
+
+        // Создаем элемент карты
+        const card = elements.create("card");
+        card.mount("#card-element");
+
+        // Обработка отправки формы
+        const form = document.getElementById("payment-form");
+        form.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            // Запрос на сервер для получения clientSecret
+            const response = await fetch("/payment/", { method: "POST" });
+            console.log(response);
+            const { clientSecret } = await response.json();
+
+            // Подтверждение оплаты
+            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: {
+                        "number": "4242424242424242",
+                        "exp_month": 12,
+                        "exp_year": 2024,
+                        "cvc": "123",
+                    },
+                    billing_details: {
+                        name: "Test User", // Имя клиента
+                    },
+                },
+            });
+            console.log(paymentIntent);
+
+            if (error) {
+                // Вывод ошибки на экран
+                document.getElementById("card-errors").textContent = error.message;
+                console.log(error);
+                console.log(paymentIntent);
+            } else if (paymentIntent.status === "succeeded") {
+                // Если оплата успешна
+                alert("Платеж успешно завершен!");
+            }
+        });
+</script>
 {% endblock %}

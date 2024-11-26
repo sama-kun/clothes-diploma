@@ -17,12 +17,29 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+class Gender(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+class Department(models.Model):
+    department_name = models.CharField(max_length=100)
+    genders = models.ManyToManyField(Gender, related_name="departments")
+
+    def __str__(self):
+        return self.department_name
+
 
 class Category(models.Model):
     category_name = models.CharField(max_length=50)
+    genders = models.ManyToManyField(Gender, related_name="categories")
+    departments = models.ManyToManyField(Department, related_name="categories")
 
     def __str__(self):
         return self.category_name
+
 
 
 TAG = (
@@ -60,6 +77,7 @@ class Product(models.Model):
     file = models.FileField(upload_to='file', null=True, blank=True)
     is_free = models.BooleanField(default=False)
     sizes = models.ManyToManyField(Size, related_name="products")
+    gender = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.product_name

@@ -225,7 +225,54 @@ Product Listing
 .price-sort {
     padding-bottom: 50px;
 }
+.wishlist-icon {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.btn-wishlist {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #ff4d4d; /* Цвет границы сердца */
+    cursor: pointer;
+    position: relative;
+}
+
+.btn-wishlist .fa-heart {
+    position: relative;
+    font-size: 1.5rem;
+    color: #ff4d4d;
+    background: transparent;
+    -webkit-text-stroke: 1px black; /* Добавление границы */
+    color: transparent; /* Внутренняя часть сердца прозрачна */
+    transition: color 0.3s ease, -webkit-text-stroke 0.3s ease;
+}
+
+/* Стиль для красного заполненного сердца */
+.btn-wishlist .fa-heart.liked {
+    color: #ff4d4d; /* Заполнено красным цветом */
+    -webkit-text-stroke: 0px; /* Убираем границу */
+}
+.btn-wishlist:hover .fa-heart {
+    color: #eb9595; /* При наведении внутренняя часть заполняется цветом */
+    -webkit-text-stroke: 0px; /* Убирается обводка */
+}
 </style>
+
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show mb-0" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <!-- Category Filter -->
 <div class="shop-box-inner">
     <div class="container">
@@ -240,40 +287,80 @@ Product Listing
                     <div class="filter-section">
                         <div class="filter-title"> <b>Filters</b></div>
 
-                        <form method="get" class=" mb-4">
-                            <div class="filter-group">
-                                <label class="filter-label">Sort by</label>
-                                <div class="sort-options">
-                                    <label class="sort-option">
-                                        <input type="radio" name="sort_by" value="price_asc" {% if request.GET.sort_by == 'price_asc' %}checked{% endif %} onchange="this.form.submit()">
-                                        <span class="option-text">Price: Low to High</span>
-                                    </label>
-                                    <label class="sort-option">
-                                        <input type="radio" name="sort_by" value="price_desc" {% if request.GET.sort_by == 'price_desc' %}checked{% endif %} onchange="this.form.submit()">
-                                        <span class="option-text">Price: High to Low</span>
-                                    </label>
-                                    <label class="sort-option">
-                                        <input type="radio" name="sort_by" value="name_asc" {% if request.GET.sort_by == 'name_asc' %}checked{% endif %} onchange="this.form.submit()">
-                                        <span class="option-text">Name: A to Z</span>
-                                    </label>
-                                    <label class="sort-option">
-                                        <input type="radio" name="sort_by" value="name_desc" {% if request.GET.sort_by == 'name_desc' %}checked{% endif %} onchange="this.form.submit()">
-                                        <span class="option-text">Name: Z to A</span>
-                                    </label>
-                                </div>
-                            </div>
+<form method="get" class="mb-4">
+    <!-- Сортировка -->
+    <div class="filter-group">
+    <label class="filter-label">Sort by</label>
+    <div class="sort-options">
+        <label class="sort-option">
+            <input type="radio" name="sort_by" value="price_asc" {% if request.GET.sort_by == 'price_asc' %}checked{% endif %} onchange="this.form.submit()">
+            <span class="option-text">Price: Low to High</span>
+        </label>
+        <label class="sort-option">
+            <input type="radio" name="sort_by" value="price_desc" {% if request.GET.sort_by == 'price_desc' %}checked{% endif %} onchange="this.form.submit()">
+            <span class="option-text">Price: High to Low</span>
+        </label>
+        <label class="sort-option">
+            <input type="radio" name="sort_by" value="name_asc" {% if request.GET.sort_by == 'name_asc' %}checked{% endif %} onchange="this.form.submit()">
+            <span class="option-text">Name: A to Z</span>
+        </label>
+        <label class="sort-option">
+            <input type="radio" name="sort_by" value="name_desc" {% if request.GET.sort_by == 'name_desc' %}checked{% endif %} onchange="this.form.submit()">
+            <span class="option-text">Name: Z to A</span>
+        </label>
+    </div>
+</div>
 
-                            <div class="filter-group">
-                                <label class="filter-label price-sort">Sort by Price of range</label>
-                                <div id="price-slider" class="w-50"></div>
-                                <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
-                                <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
-                                <span id="price-min-output" class="ml-2">{{ min_selected_price }} ₸</span> - 
-                                <span id="price-max-output" class="ml-2">{{ max_selected_price }} ₸</span>
-                            </div>
+    <!-- Фильтр по гендеру -->
+    <div class="filter-group">
+        <label class="filter-label">Select Gender</label>
+        {% for gender in gendersFilters %}
+            <label class="sort-option">
+                <input type="radio" name="gender" value="{{ gender.id }}" 
+                       {% if request.GET.gender == gender.id|stringformat:"s" %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <span class="option-text">{{ gender.name }}</span>
+            </label>
+        {% endfor %}
+    </div>
 
-                             <button type="submit" class="apply-filters">Apply Filters</button>
-                        </form>
+    <div class="filter-group">
+    <label class="filter-label">Select Department</label>
+    {% for department in departments %}
+        <label class="sort-option">
+            <input type="checkbox" name="departments" value="{{ department.id }}" 
+                   {% if department.id in selected_departments %}checked{% endif %}
+                   onchange="this.form.submit()">
+            <span class="option-text">{{ department.department_name }}</span>
+        </label>
+    {% endfor %}
+</div>
+
+<!-- Фильтр по категориям -->
+<div class="filter-group">
+    <label class="filter-label">Select Category</label>
+    {% for category in categories %}
+        <label class="sort-option">
+            <input type="checkbox" name="categories" value="{{ category.id }}" 
+                   {% if category.id in selected_categories %}checked{% endif %}
+                   onchange="this.form.submit()">
+            <span class="option-text">{{ category.category_name }}</span>
+        </label>
+    {% endfor %}
+</div>
+
+    <!-- Диапазон цен -->
+    <div class="filter-group">
+        <label class="filter-label">Price Range</label>
+        <div id="price-slider"></div>
+        <input type="hidden" name="min_price" id="min_price_input" value="{{ min_selected_price }}">
+        <input type="hidden" name="max_price" id="max_price_input" value="{{ max_selected_price }}">
+        <span id="price-min-output">{{ min_selected_price }} ₸</span> -
+        <span id="price-max-output">{{ max_selected_price }} ₸</span>
+    </div>
+
+    <button type="submit" class="apply-filters">Apply Filters</button>
+</form>
 
 
 
@@ -284,32 +371,47 @@ Product Listing
                     <!-- Список товаров -->
                     <div class="products-section">
                         <div class="row-card">
-                            {% for product in products %}
-                            <div class="col-lg-3 col-md-6 special-grid">
-                                <div class="products-single fix p-2 bg-white rounded custom-card">
-                                    <!-- Главное изображение -->
-                                    <div class="box-img-hover">
-                                        <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
-                                    </div>
-                                    <!-- Дополнительные изображения -->
-                                    <div class="additional-images">
-                                        <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
-                                        <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
-                                    </div>
-                                    <!-- Информация о продукте -->
-                                    <div class="product-info font-weight-bold text-left">
-                                        <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
-                                        <h3><b>{{ product.price|intcomma }} ₸</b></h3>
-                                        <p>
-                                            <strong>Gender:</strong> {{ product.gender }} <br>
-                                            <strong>Category:</strong> {{ product.category }} <br>
-                                            <strong>Sizes Available:</strong> {{ product.sizes|length }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
+    {% for product in products %}
+    <div class="col-lg-3 col-md-6 special-grid">
+        <div class="products-single fix p-2 bg-white rounded custom-card">
+            <!-- Главное изображение -->
+            <div class="box-img-hover">
+                <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
+            </div>
+            <!-- Дополнительные изображения -->
+            <div class="additional-images">
+                <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
+                <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
+            </div>
+            <!-- Информация о продукте -->
+            <div class="product-info font-weight-bold text-left">
+                <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
+                <h3><b>{{ product.price|intcomma }} ₸</b></h3>
+                <p>
+                    <strong>Gender:</strong> {{ product.gender }} <br>
+                    <strong>Category:</strong> {{ product.category }} <br>
+                    <strong>Sizes Available:</strong> {{ product.sizes|length }}
+                </p>
+            </div>
+            <!-- Кнопка добавления в вишлист -->
+            <div class="wishlist-icon">
+                {% csrf_token %}
+                {% if product.liked %}
+                    <!-- Если продукт в вишлисте -->
+                    <a href="/removefromwishlist/{{ product.id }}" class="btn-wishlist">
+                        <i class="fa fa-heart liked"></i> <!-- Красная иконка -->
+                    </a>
+                {% else %}
+                    <!-- Если продукта нет в вишлисте -->
+                    <a href="/addtowishlist/{{ product.id }}" class="btn-wishlist">
+                        <i class="fa fa-heart"></i> <!-- Прозрачная иконка -->
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
                         <p class="text-center">Found {{ n }} product(s)</p>
                     </div>
                 </div>
@@ -317,37 +419,55 @@ Product Listing
         </div>
     </div>
 </div>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script> -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var slider = document.getElementById('price-slider');
-    if (!slider) return;
+// document.addEventListener("DOMContentLoaded", function() {
+//     var slider = document.getElementById('price-slider');
+//     if (!slider) return;
 
+//     noUiSlider.create(slider, {
+//         start: [{{ min_selected_price|default:"0" }}, {{ max_selected_price|default:"10000" }}],
+//         connect: true,
+//         range: {
+//             'min': {{ min_price|default:"0" }},
+//             'max': {{ max_price|default:"10000" }}
+//         },
+//         step: 10,
+//         tooltips: [true, true],
+//         format: {
+//             to: function (value) { return Math.round(value); },
+//             from: function (value) { return Number(value); }
+//         }
+//     });
+
+//     slider.noUiSlider.on('update', function(values) {
+//         document.getElementById('price-min-output').innerText = values[0] + " ₸";
+//         document.getElementById('price-max-output').innerText = values[1] + " ₸";
+//         document.getElementById('min_price_input').value = values[0];
+//         document.getElementById('max_price_input').value = values[1];
+//     });
+    
+//     slider.noUiSlider.on('change', function(values) {
+//         // После изменения значений, отправьте форму
+//         // document.querySelector("form").submit();
+//     });
+// });
+
+const slider = document.getElementById('price-slider');
     noUiSlider.create(slider, {
-        start: [{{ min_selected_price|default:"0" }}, {{ max_selected_price|default:"10000" }}],
+        start: [{{ min_selected_price }}, {{ max_selected_price }}],
         connect: true,
         range: {
-            'min': {{ min_price|default:"0" }},
-            'max': {{ max_price|default:"10000" }}
-        },
-        step: 10,
-        tooltips: [true, true],
-        format: {
-            to: function (value) { return Math.round(value); },
-            from: function (value) { return Number(value); }
+            'min': {{ local_min_price }},
+            'max': {{ local_max_price }}
         }
     });
+    slider.noUiSlider.on('update', function (values) {
+        document.getElementById('min_price_input').value = Math.round(values[0]);
+        document.getElementById('max_price_input').value = Math.round(values[1]);
+        document.getElementById('price-min-output').textContent = Math.round(values[0]) + ' ₸';
+        document.getElementById('price-max-output').textContent = Math.round(values[1]) + ' ₸';
+    });
 
-    slider.noUiSlider.on('update', function(values) {
-        document.getElementById('price-min-output').innerText = values[0] + " ₸";
-        document.getElementById('price-max-output').innerText = values[1] + " ₸";
-        document.getElementById('min_price_input').value = values[0];
-        document.getElementById('max_price_input').value = values[1];
-    });
-    
-    slider.noUiSlider.on('change', function(values) {
-        // После изменения значений, отправьте форму
-        // document.querySelector("form").submit();
-    });
-});
 </script>
 {% endblock %}

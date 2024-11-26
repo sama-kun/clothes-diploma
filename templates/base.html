@@ -19,6 +19,7 @@
 	<meta name="author" content="">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js"></script>
@@ -34,126 +35,121 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
     <style> 
-        .navbar-categories {
-        /* background-color: #fff; */
-        border-bottom: 1px solid #ddd;
-        font-family: Arial, sans-serif;
-        position: relative;
-        z-index: 10;
-        /* display: flex;
-        justify-content: center; */
-        }
-
-        .navbar-menu {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        margin: 0;
-        padding: 0;
-        }
-
-        .navbar-item {
-        position: relative;
-        }
-
-        .navbar-link {
-        display: block;
-        padding: 15px 20px;
-        text-decoration: none;
-        font-weight: bold;
-        color: #333;
-        text-transform: uppercase;
-        }
-
-        .navbar-link:hover {
-        background-color: #f5f5f5;
-        }
-
-        /* Dropdown styling */
-        .dropdown-categories {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100vw; /* Full width */
-        background-color: #fff;
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-        border-top: 1px solid #ddd;
-        padding: 20px 0;
-        z-index: 100;
-        }
-
-        .navbar-item:hover .dropdown-categories {
-        display: flex;
-        }
-
-        /* Dropdown sections */
-        .dropdown-section {
-        padding: 0 20px;
-        flex: 1;
-        }
-
-        .dropdown-section strong {
-        display: block;
-        margin-bottom: 10px;
-        font-weight: bold;
-        color: #000;
-        }
-
-        .dropdown-section ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        }
-
-        .dropdown-section ul li {
-        margin-bottom: 5px;
-        }
-
-        .dropdown-section ul li a {
-        color: #555;
-        text-decoration: none;
-        }
-
-        .dropdown-section ul li a:hover {
-        text-decoration: underline;
-        }
-
-        /* Divider between sections */
-        .dropdown-divider {
-        width: 1px;
-        /* background-color: #ddd; */
-        height: 100%;
-        margin: 0 10px;
-        }
-
-        /* Dropdown layout */
-        .dropdown-categories {
-        display: none;
-        flex-wrap: nowrap;
-        align-items: flex-start;
-        }
-
-        .navbar-item:hover .dropdown {
-        display: flex;
-        align-items: flex-start;
-        }
-        .custom-btn {
-    background-color: black;
+.navbar-categories {
+    border-bottom: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+    position: relative;
+    z-index: 10;
 }
 
-.custom-btn:hover {
-    background-color: rgb(54, 53, 53);
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
-/* .custom-cart {
-    color: black;
+.navbar-item {
+    position: relative;
 }
-.custom-cart:hover {
-    color: rgb(54, 53, 53);
-} */
-.custom-header {
+
+.navbar-link {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.navbar-link:hover {
+    background-color: #f5f5f5;
+}
+
+/* Dropdown styling */
+.dropdown-categories {
+    display: none; /* Скрыто изначально */
+    position: absolute;
+    top: 100%;
+    left: 50%; /* Центрируем относительно родителя */
+    transform: translateX(-50%); /* Уравниваем смещение */
+    background-color: #fff;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    padding: 20px;
+    z-index: 1000;
+
+    /* Ограничения и адаптивность */
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    flex-wrap: nowrap; /* Запрещаем перенос */
+    gap: 20px;
+}
+
+/* Показ меню как попап при наведении */
+.navbar-item:hover .dropdown-categories {
+    display: flex; /* Показывать на ховере */
+}
+
+/* Dropdown sections */
+.dropdown-section {
+    padding: 0 20px;
+    flex: 0 0 auto;
+    min-width: 200px;
+    border-left: 1px solid #ddd;
+}
+
+.dropdown-section:first-child {
+    border-left: none;
+}
+
+.dropdown-section strong {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
     color: #000;
+}
+
+.dropdown-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-section ul li {
+    margin-bottom: 5px;
+}
+
+.dropdown-section ul li a {
+    color: #555;
+    text-decoration: none;
+}
+
+.dropdown-section ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Для маленьких экранов */
+@media (max-width: 768px) {
+    .dropdown-categories {
+        flex-wrap: wrap;
+        top: 100%; /* Оставляем как попап ниже меню */
+        left: 0;
+        transform: none; /* Убираем центрирование */
+        max-width: 100%; /* Используем всю ширину экрана */
+    }
+
+    .dropdown-section {
+        flex: 1 1 100%;
+        border-left: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .dropdown-section:first-child {
+        border-top: none;
+    }
 }
     </style>
 
@@ -238,7 +234,7 @@
                                     {% else %}
                                     <li class="nav-item">
                                         <a class="nav-link font-weight-bold">
-                                             Cart empty
+                                            Cart empty
                                         </a>
                                     </li>
                                     {% endif %}
@@ -281,44 +277,34 @@
 		</nav>
 <nav class="navbar-categories">
   <ul class="navbar-menu">
-    <li class="navbar-item">
-      <a href="#" class="navbar-link">Men</a>
-      <div class="dropdown-categories">
-        <div class="dropdown-section">
-          <strong>New & Trending</strong>
-          <ul>
-            <li><a href="#">New Arrivals</a></li>
-            <li><a href="#">Trending</a></li>
-            <li><a href="#">Sale</a></li>
-            <li><a href="#">Featured</a></li>
-          </ul>
-        </div>
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-section">
-          <strong>Shoes</strong>
-          <ul>
-            <li><a href="#">Sneakers</a></li>
-            <li><a href="#">Running</a></li>
-            <li><a href="#">Soccer</a></li>
-            <li><a href="#">Basketball</a></li>
-          </ul>
-        </div>
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-section">
-          <strong>Clothing</strong>
-          <ul>
-            <li><a href="#">Hoodies & Sweatshirts</a></li>
-            <li><a href="#">Pants</a></li>
-            <li><a href="#">Jackets</a></li>
-            <li><a href="#">Shorts</a></li>
-          </ul>
-        </div>
-      </div>
+    {% for gender in genders %}
+        <li class="navbar-item">
+            <a href="#" class="navbar-link">{{gender.gender_name}}</a>
+            <div class="dropdown-categories">
+                <div class="dropdown-section">
+                    <strong>New & Trending</strong>
+                    <ul>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Trending</a></li>
+                        <li><a href="#">Sale</a></li>
+                        <li><a href="#">Featured</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown-divider"></div>
+                {% for department in gender.departments %}
+                    <div class="dropdown-section">
+                    <strong>{{department.department_name}}</strong>
+                    <ul>
+                        {% for category in department.categories %}
+                            <li><a href="#">{{category.category_name}}</a></li>
+                        {% endfor %}    
+                    </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </li>
-    <li class="navbar-item"><a href="#" class="navbar-link">Women</a></li>
-    <li class="navbar-item"><a href="#" class="navbar-link">Kids</a></li>
-    <li class="navbar-item"><a href="#" class="navbar-link">Trending</a></li>
-  </ul>
+</ul>
 </nav>
 	</header>
 
@@ -395,3 +381,39 @@
 </body>
 
 </html>
+
+
+      <!-- <div class="dropdown-categories">
+        <div class="dropdown-section">
+          <strong>New & Trending</strong>
+          <ul>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Trending</a></li>
+            <li><a href="#">Sale</a></li>
+            <li><a href="#">Featured</a></li>
+          </ul>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-section">
+          <strong>Shoes</strong>
+          <ul>
+            <li><a href="#">Sneakers</a></li>
+            <li><a href="#">Running</a></li>
+            <li><a href="#">Soccer</a></li>
+            <li><a href="#">Basketball</a></li>
+          </ul>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-section">
+          <strong>Clothing</strong>
+          <ul>
+            <li><a href="#">Hoodies & Sweatshirts</a></li>
+            <li><a href="#">Pants</a></li>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Shorts</a></li>
+          </ul>
+        </div>
+      </div> -->
+    <!-- <li class="navbar-item"><a href="#" class="navbar-link">Women</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Kids</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Trending</a></li> -->
