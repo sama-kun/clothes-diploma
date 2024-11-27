@@ -1,4 +1,3 @@
-from django.views import View
 from django.shortcuts import render
 from shop.models import Category, Customer, Gender, Product, Cart
 
@@ -14,38 +13,43 @@ def index(request):
     categories = Category.objects.all()
     carts = Cart.objects.filter(user_id=current_user.id)
 
+    # Prefetching the related data to minimize database hits
     genders = Gender.objects.prefetch_related('departments', 'categories')
     gender_data = []
+
     for gender in genders:
-        departments = gender.departments.all()  # Департаменты, относящиеся к гендеру
+        departments = gender.departments.all()  # Get departments related to gender
         department_data = []
+        
         for department in departments:
-            categories = department.categories.filter(genders=gender)  # Категории, относящиеся и к гендеру, и к департаменту
+            # Categories related to both gender and department
+            categories = department.categories.filter(genders=gender)
             department_data.append({
+                'department_id': department.id,  # Add department id
                 'department_name': department.department_name,
-                'categories': [{'category_name': cat.category_name} for cat in categories]
+                'categories': [{'category_name': cat.category_name, 'category_id': cat.id} for cat in categories]  # Add category id
             })
+        
         gender_data.append({
+            'gender_id': gender.id,  # Add gender id
             'gender_name': gender.name,
             'departments': department_data
         })
 
-    print(gender_data)
-
-    customer = []
+    # Getting the current user's customer object
     try:
         customer = Customer.objects.get(user_id=current_user.id)
-    except:
-        pass
+    except Customer.DoesNotExist:
+        customer = None
     
     qty = 0
     total = 0
     for cart in carts:
-        total = total + cart.amount
-        qty = qty + cart.qty
-    
+        total += cart.amount
+        qty += cart.qty
+
     params = {
-        'customer':customer,
+        'customer': customer,
         'products': products,
         'mobiles': mobiles,
         'laptops': laptops,
@@ -53,13 +57,11 @@ def index(request):
         'headphones': headphones,
         'homeapps': homeapps,
         'kitapps': kitapps,
-        'categories':categories,
-        'qty':qty,
-        'total':total,
-        'carts':carts,
-        'genders': gender_data, 
+        'categories': categories,
+        'qty': qty,
+        'total': total,
+        'carts': carts,
+        'genders': gender_data,  # Include gender data with ids
     }
 
     return render(request, 'index.html', params)
-
-

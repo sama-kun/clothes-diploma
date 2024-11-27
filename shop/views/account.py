@@ -16,13 +16,17 @@ def account(request):
         qty = qty + cart.qty
     
     categories = Category.objects.all()
-    customer = Customer.objects.get(user_id=currentuser.id)
+    customer = Customer.objects.select_related('user').get(user_id=currentuser.id)
     wishlists = Wishlist.objects.filter(user_id=currentuser.id)
 
     orders = Order.objects.filter(user_id=currentuser.id).order_by("-placed_at")
     for order in orders:
         pr = OrderProduct.objects.filter(order_id=order.id)
         orderprs.append(pr)
+    
+    print(customer)
+    # if not customer.profile_picture:
+    #     customer.profile_picture = '/static/images/default-profile.png'
     
     details = {
         'customer':customer,
@@ -33,6 +37,6 @@ def account(request):
         'carts':carts,
         'categories':categories,
         'wishlists':wishlists
-        }
+    }
 
     return render(request, 'account.html', details)

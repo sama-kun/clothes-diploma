@@ -10,7 +10,8 @@ Class-based views
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 """
 from django.urls import path
-from .views import index, signup, login, productdetail, products, cartoperations, buynow, checkout, logout, cart, account
+
+from .views import index, signup, login, productdetail, products, cartoperations, buynow, checkout, logout, cart, account, generate_pdf
 from .views import wishlist, search, updateprofile, changepassword, postreview, contact, about, cancelproduct, payment
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
     path("products/", products.products, name="Products"),
     path("search/", search.search, name="Search"),
     path("productdetail/<int:prid>", productdetail.productdetail, name="ProductDetail"),
+    path('order/receipt/', generate_pdf.generate_pdf, name='generate_pdf'),
     path("addtocart/<int:prid>/<str:sizeId>", cartoperations.addtocart, name="AddtoCart"),
     path("buynow/<int:prid>", buynow.buynow, name="BuyNow"),
     path("postreview/<int:prid>", postreview.postreview, name="PostReview"),

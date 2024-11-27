@@ -47,7 +47,12 @@ Palette Style
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom:20px;">
                             <div class="mb-4 ctr">
-                                <img src="{{customer.profile_pic.url}}" height="200px" alt="Image" style="border-radius: 25%;">
+                                <!-- <img src="{{customer.profile_pic.url}}" height="200px" alt="Image" style="border-radius: 25%;"> -->
+                                 <!-- {% if customer.profile_picture and customer.profile_picture.url %}
+                                    <img src="{{ customer.profile_picture.url }}" alt="Profile Picture">
+                                {% else %}
+                                    <img src="{% static 'userimg.png' %}" alt="Default Profile Picture">
+                                {% endif %} -->
                             </div>
                             <div class="mb-2 ctr">
                                 <a href="/account/updateprofile" class="btn hvr-hover cart mx-1" style="color:white">Update profile</a>
@@ -104,7 +109,7 @@ Palette Style
                                             </td>
                                             <td class="thumbnail-img" style="text-align:center">
                                                 <a href="/productdetail/{{wishlist.product_id}}">
-                                                <img height="100" src="{{wishlist.product.product_img.url}}" alt="" />
+                                                <!-- <img height="100" src="{{wishlist.product.product_img.url}}" alt="" /> -->
                                                 </a>
                                             </td>
                                             <td class="name-pr">
@@ -211,7 +216,7 @@ Palette Style
                                                         Delivered
                                                     </a>
                                                     {% else %}
-                                                    <a href="{{orderp.product.file.url}}" download="" class="btn hvr-hover" style="color: #e9ecef;">
+                                                    <a href="{{orderp.product.product_img.url}}" download="" class="btn hvr-hover" style="color: #e9ecef;">
                                                          Save
                                                     </a>
                                                     {% endif %}

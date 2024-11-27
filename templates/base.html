@@ -182,7 +182,11 @@
                             {% if user.id %}
                             <li class="dropdown">
                                 <a href="/account" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                    <img src="{{ customer.profile_pic.url }}" class="avatar">
+                                    <!-- {% if customer.profile_picture and customer.profile_picture.url %}
+    <img src="{{ customer.profile_picture.url }}" alt="Profile Picture">
+{% else %}
+    <img src="{% static 'userimg.png' %}" alt="Default Profile Picture">
+{% endif %} -->
                                     <span class="pl-2">{{user.first_name}} {{user.last_name}}</span>
                                    
                                 </a>
@@ -279,7 +283,7 @@
   <ul class="navbar-menu">
     {% for gender in genders %}
         <li class="navbar-item">
-            <a href="#" class="navbar-link">{{gender.gender_name}}</a>
+            <a href="/products/?gender={{gender.gender_id}}" class="navbar-link">{{gender.gender_name}}</a>
             <div class="dropdown-categories">
                 <div class="dropdown-section">
                     <strong>New & Trending</strong>
@@ -293,10 +297,14 @@
                 <div class="dropdown-divider"></div>
                 {% for department in gender.departments %}
                     <div class="dropdown-section">
-                    <strong>{{department.department_name}}</strong>
+                        <strong>
+                    <a href="/products/?gender={{gender.gender_id}}&departments={{department.department_id}}">
+                        {{department.department_name}}
+                    </a>
+                    </strong>
                     <ul>
                         {% for category in department.categories %}
-                            <li><a href="#">{{category.category_name}}</a></li>
+                            <li><a href="/products/?gender={{gender.gender_id}}&departments={{department.department_id}}&categories={{category.category_id}}">{{category.category_name}}</a></li>
                         {% endfor %}    
                     </ul>
                     </div>

@@ -172,48 +172,91 @@ Palette Style
 
 <script>
     // Initialize Stripe with your public key
-    const stripe = Stripe("pk_test_51MiaNMF9AyD8ZSBF7B3nokCo2nTp3cyLnDh13z6pQvtmV4N5xmt7xrdRDr80iR87y0wTOST8B7JiY7GOnFzEyHy100X37gzl9q");
-        const elements = stripe.elements();
+    // const stripe = Stripe("pk_test_51MiaNMF9AyD8ZSBF7B3nokCo2nTp3cyLnDh13z6pQvtmV4N5xmt7xrdRDr80iR87y0wTOST8B7JiY7GOnFzEyHy100X37gzl9q");
+    //     const elements = stripe.elements();
 
-        // Создаем элемент карты
-        const card = elements.create("card");
-        card.mount("#card-element");
+    //     // Создаем элемент карты
+    //     const card = elements.create("card");
+    //     card.mount("#card-element");
 
-        // Обработка отправки формы
-        const form = document.getElementById("payment-form");
-        form.addEventListener("click", async (event) => {
-            event.preventDefault();
+    //     // Обработка отправки формы
+    //     const form = document.getElementById("payment-form");
+    //     form.addEventListener("click", async (event) => {
+    //         event.preventDefault();
 
-            // Запрос на сервер для получения clientSecret
-            const response = await fetch("/payment/", { method: "POST" });
-            console.log(response);
-            const { clientSecret } = await response.json();
+    //         // Запрос на сервер для получения clientSecret
+    //         const response = await fetch("/payment/", { method: "POST" });
+    //         console.log(response);
+    //         const { clientSecret } = await response.json();
 
-            // Подтверждение оплаты
-            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: {
-                        "number": "4242424242424242",
-                        "exp_month": 12,
-                        "exp_year": 2024,
-                        "cvc": "123",
-                    },
-                    billing_details: {
-                        name: "Test User", // Имя клиента
-                    },
-                },
-            });
-            console.log(paymentIntent);
+    //         // Подтверждение оплаты
+    //         const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    //             payment_method: {
+    //                 card: {
+    //                     "number": "4242424242424242",
+    //                     "exp_month": 12,
+    //                     "exp_year": 2024,
+    //                     "cvc": "123",
+    //                 },
+    //                 billing_details: {
+    //                     name: "Test User", // Имя клиента
+    //                 },
+    //             },
+    //         });
+    //         console.log(paymentIntent);
 
-            if (error) {
-                // Вывод ошибки на экран
-                document.getElementById("card-errors").textContent = error.message;
-                console.log(error);
-                console.log(paymentIntent);
-            } else if (paymentIntent.status === "succeeded") {
-                // Если оплата успешна
-                alert("Платеж успешно завершен!");
-            }
+    //         if (error) {
+    //             // Вывод ошибки на экран
+    //             document.getElementById("card-errors").textContent = error.message;
+    //             console.log(error);
+    //             console.log(paymentIntent);
+    //         } else if (paymentIntent.status === "succeeded") {
+    //             // Если оплата успешна
+    //             alert("Платеж успешно завершен!");
+    //         }
+    //     });
+
+    
+    
+document.getElementById('submit-button').addEventListener('click', async function () {
+    try {
+        const response = await fetch('/order/receipt/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(), // CSRF Token
+            },
         });
+
+        if (response.ok) {
+            // Convert the response into a Blob and create a download link
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `order_receipt_${order.id}.pdf`;  // Use dynamic order ID here
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error('Failed to generate PDF:', response.statusText);
+            alert('Error generating PDF: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+    }
+});
+
+    function getCSRFToken() {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+                return cookie.substring('csrftoken='.length, cookie.length);
+            }
+        }
+        return '';
+    }
 </script>
 {% endblock %}

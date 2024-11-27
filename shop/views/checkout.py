@@ -15,64 +15,25 @@ def checkout(request):
     total = 0
     qty = 0
     for cart in carts:
-        total = total + cart.amount
-        qty = qty + cart.qty
-    
-    discount = 10/100 * total
+        total += cart.amount
+        qty += cart.qty
+
+    discount = 10 / 100 * total
     if discount > 20000:
         discount = 20000
 
     grand_total = total - discount
 
-    if request.method == "POST":
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        phone = request.POST['phone']
-        house_no = request.POST['house_no']
-        street = request.POST['street']
-        state = request.POST['state']
-        city = request.POST['city']
-        pin = request.POST['pin']
-        code = "OD-" + get_random_string(10).upper()
+    # Инициализируем order значением None, чтобы избежать ошибки
 
-        order = Order(
-            user_id = currentuser.id,
-            first_name = firstname,
-            last_name = lastname,
-            phone = phone,
-            house_no = house_no,
-            street = street,
-            city = city,
-            pin = pin,
-            state = state,
-            total = grand_total,
-            code = code
-        )
-        order.save()
-
-        for cart in carts:
-            orderpr = OrderProduct(
-                order_id = order.id,
-                user_id = currentuser.id,
-                product_id = cart.product_id,
-                qty = cart.qty,
-                price = cart.product.price,
-                amount = cart.amount
-            )
-            orderpr.save()
-        
-        Cart.objects.filter(user_id=currentuser.id).delete()
-        messages.success(request, "Order has been placed. Thank You 😊")
-        return redirect('Account')
-    
     details = {
-        'myuser':myuser,
-        'customer':customer,
-        'carts':carts,
-        'qty':qty,
-        'total':total,
-        'discount':discount,
-        'grand_total':grand_total,
+        'myuser': myuser,
+        'customer': customer,
+        'carts': carts,
+        'qty': qty,
+        'total': total,
+        'discount': discount,
+        'grand_total': grand_total,
     }
-    
+
     return render(request, 'checkout.html', details)
