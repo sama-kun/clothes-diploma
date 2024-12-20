@@ -161,55 +161,6 @@ Palette Style
         </div>
     {% endfor %}
 {% endif %}
-
-<!-- <div id="slides-shop" class="cover-slides" style="height:500px">
-    <ul class="slides-container">
-    <li class="text-left">
-        <img src="{% static 'needs/1.png' %}" alt="">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="m-b-20"><strong>Join DesignerMarket: Discover a World of Unique Fashion!</strong></h1>
-                    <p class="m-b-40">Explore exclusive collections from independent designers around the globe on our platform. Unite with talent, support creativity, and buy unique garments directly from the creators.</p>
-                    <p><a class="btn hvr-hover" href="/products">Browse Products</a></p>
-                </div>
-            </div>
-        </div>
-    </li>
-
-    <li class="text-left">
-        <img src="{% static 'needs/2.png' %}" alt="">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="m-b-20"><strong>Streamline Your Fashion Finds with DesignerMarket.</strong></h1>
-                    <p class="m-b-40">Our platform makes it simple to connect with up-and-coming designers and secure pieces that elevate your style. Experience the convenience of discovering fashion that tells a story.</p>
-                    <p><a class="btn hvr-hover" href="/products">Explore Options</a></p>
-                </div>
-            </div>
-        </div>
-    </li>
-</ul>
-
-    <div class="slides-navigation">
-        <a href="#" class="next"><i class="fas fa-angle-right" aria-hidden="true"></i></a>
-        <a href="#" class="prev"><i class="fas fa-angle-left" aria-hidden="true"></i></a>
-    </div>
-</div>
-
-<div class="video-container" style="position: relative; text-align: center; color: white; margin-top: 20px;">
-    <video autoplay muted loop style="width: 100%; height: auto;">
-        <source src="{% static 'needs/preview_video.mp4' %}" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-    </video>
-    
-    <div class="video-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <h1 style="font-size: 3rem; font-weight: bold; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);">Добро пожаловать в DesignerMarket!</h1>
-        <p style="font-size: 1.5rem; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);">Уникальные вещи от дизайнеров со всего мира.</p>
-        <a href="/products" class="btn hvr-hover" style="margin-top: 20px; color: white; background-color: #007bff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Открыть коллекцию</a>
-    </div>
-</div> -->
-
 <div id="slides-shop" class="cover-slides" style="height: 100vh; overflow: hidden;">
     <ul class="slides-container" style="list-style: none; padding: 0; margin: 0;">
         <!-- Первый слайд -->
@@ -239,22 +190,18 @@ Palette Style
             </div>
         </li>
 
-        <!-- Второй слайд -->
         <li class="text-left" style="height: 100vh; position: relative;">
             <div class="video-container" style="position: relative; height: 100%; width: 100%;">
-                <!-- Видео -->
                 <video autoplay muted loop style="width: 100%; height: 100%; object-fit: cover;">
                     <source src="{% static 'needs/preview_video.mp4' %}" type="video/mp4">
                     Ваш браузер не поддерживает видео.
                 </video>
-                <!-- Текст -->
                 <div class="video-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
                     <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="m-b-20"><strong>Streamline Your Fashion Finds with DesignerMarket.</strong></h1>
                     <p class="m-b-40">Our platform makes it simple to connect with up-and-coming designers and secure pieces that elevate your style. Experience the convenience of discovering fashion that tells a story.</p>
-                    <!-- <p><a class="btn hvr-hover" href="/products">Explore Options</a></p> -->
                     <a href="/products" class="btn hvr-hover" 
                         style="margin-top: 20px; color: white; background-color: rgba(0, 0, 0, 0.5); 
                                padding: 10px 20px; border-radius: 5px; text-decoration: none; z-index: 100;">
@@ -268,7 +215,6 @@ Palette Style
         </li>
     </ul>
 
-    <!-- Кнопки навигации -->
     <div class="slides-navigation" style="position: absolute; top: 50%; width: 100%; transform: translateY(-50%);">
     <a href="#" class="next" style="position: absolute; right: 10px; background: rgba(255, 255, 255, 0.5); padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; height: 40px; width: 40px;">
         <i class="fas fa-angle-right" aria-hidden="true" style="font-size: 1.5rem; color: black;"></i>
@@ -310,18 +256,13 @@ Palette Style
     {% for product in products %}
     <div class="col-lg-3 col-md-6 special-grid">
         <div class="products-single fix p-2 bg-white rounded custom-card">
-            <!-- Главное изображение -->
             <div class="box-img-hover">
                 <img src="{{ product.product_img.url }}" class="img-fluid main-img" alt="Image">
             </div>
-            <!-- Дополнительные изображения -->
             <div class="additional-images">
-                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
-                <!-- <div class="additional-img" style="background-color: #f8f8f8;"></div> -->
                 <img src="{{ product.product_img2.url }}" class="img-fluid additional-img" alt="Additional Image 1">
                 <img src="{{ product.product_img1.url }}" class="img-fluid additional-img" alt="Additional Image 2">
             </div>
-            <!-- Информация о продукте -->
             <div class="product-info font-weight-bold text-left">
                 <h4><a href="/productdetail/{{ product.id }}"> <b>{{ product.product_name }}</b></a></h4>
                 <h3><b>{{ product.price|intcomma }} ₸</b></h3>

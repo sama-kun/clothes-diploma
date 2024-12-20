@@ -49,3 +49,58 @@
                                 <option value="unisex">Unisex</option>
                             </select>
                         </div>
+
+
+
+
+
+
+
+
+<!-- <div id="slides-shop" class="cover-slides" style="height:500px">
+    <ul class="slides-container">
+    <li class="text-left">
+        <img src="{% static 'needs/1.png' %}" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="m-b-20"><strong>Join DesignerMarket: Discover a World of Unique Fashion!</strong></h1>
+                    <p class="m-b-40">Explore exclusive collections from independent designers around the globe on our platform. Unite with talent, support creativity, and buy unique garments directly from the creators.</p>
+                    <p><a class="btn hvr-hover" href="/products">Browse Products</a></p>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="text-left">
+        <img src="{% static 'needs/2.png' %}" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="m-b-20"><strong>Streamline Your Fashion Finds with DesignerMarket.</strong></h1>
+                    <p class="m-b-40">Our platform makes it simple to connect with up-and-coming designers and secure pieces that elevate your style. Experience the convenience of discovering fashion that tells a story.</p>
+                    <p><a class="btn hvr-hover" href="/products">Explore Options</a></p>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+    <div class="slides-navigation">
+        <a href="#" class="next"><i class="fas fa-angle-right" aria-hidden="true"></i></a>
+        <a href="#" class="prev"><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+    </div>
+</div>
+
+<div class="video-container" style="position: relative; text-align: center; color: white; margin-top: 20px;">
+    <video autoplay muted loop style="width: 100%; height: auto;">
+        <source src="{% static 'needs/preview_video.mp4' %}" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+    
+    <div class="video-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <h1 style="font-size: 3rem; font-weight: bold; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);">Добро пожаловать в DesignerMarket!</h1>
+        <p style="font-size: 1.5rem; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);">Уникальные вещи от дизайнеров со всего мира.</p>
+        <a href="/products" class="btn hvr-hover" style="margin-top: 20px; color: white; background-color: #007bff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Открыть коллекцию</a>
+    </div>
+</div> -->
