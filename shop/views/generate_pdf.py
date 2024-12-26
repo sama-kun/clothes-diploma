@@ -109,13 +109,13 @@ def generate_pdf(request):
             # Order summary
             y_position -= 20
             p.setFont("Helvetica-Bold", 12)
-            p.drawString(100, y_position, f"Subtotal: ${total:.2f}")
+            p.drawString(100, y_position, f"Subtotal:  ₸{total:.2f}")
             y_position -= 20
-            p.setFont("Helvetica", 12)
-            p.drawString(100, y_position, f"Discount (10%): -${discount:.2f}")
+            # p.setFont("Helvetica", 12)
+            # p.drawString(100, y_position, f"Discount (10%): -${discount:.2f}")
             y_position -= 20
             p.setFont("Helvetica-Bold", 12)
-            p.drawString(100, y_position, f"Grand Total: ${grand_total:.2f}")
+            p.drawString(100, y_position, f"Grand Total:  ₸{grand_total:.2f}")
 
             # Finish PDF generation
             p.showPage()
