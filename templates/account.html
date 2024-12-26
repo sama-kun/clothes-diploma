@@ -9,6 +9,7 @@ Palette Style
 
 {% block body %}
 
+
 <div class="shadow p-2 rounded" style="background-color:#e9ecef; color:black">
     <div class="row text-center font-weight-bold">
         <div class="col-lg-2 col-md-4 col-sm-6">
@@ -47,12 +48,13 @@ Palette Style
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom:20px;">
                             <div class="mb-4 ctr">
-                                <!-- <img src="{{customer.profile_pic.url}}" height="200px" alt="Image" style="border-radius: 25%;"> -->
-                                 <!-- {% if customer.profile_picture and customer.profile_picture.url %}
-                                    <img src="{{ customer.profile_picture.url }}" alt="Profile Picture">
+                                
+                                 {% if customer.profile_picture and customer.profile_picture.url %}
+                                    <!-- <img src="{{ customer.profile_picture.url }}" alt="Profile Picture" class="profile-image"> -->
+                                    <img src="{% static 'images/userimg.png' %}" alt="Default Profile Picture">
                                 {% else %}
-                                    <img src="{% static 'userimg.png' %}" alt="Default Profile Picture">
-                                {% endif %} -->
+                                    <img src="{{customer.profile_pic.url}}" height="200px" alt="Image" style="border-radius: 25%;">
+                                {% endif %}
                             </div>
                             <div class="mb-2 ctr">
                                 <a href="/account/updateprofile" class="btn hvr-hover cart mx-1" style="color:white">Update profile</a>

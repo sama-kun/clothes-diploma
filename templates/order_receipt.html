@@ -2,65 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Receipt</title>
+    <title>Order Invoice</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { margin: 0; }
-        .details, .products { width: 100%; margin-bottom: 20px; border-collapse: collapse; }
-        .details td, .products th, .products td { padding: 8px; border: 1px solid #ddd; }
-        .products th { background-color: #f4f4f4; text-align: left; }
-        .total { text-align: right; font-weight: bold; margin-top: 20px; }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .total { font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Order Receipt</h1>
-        <p><strong>Order Code:</strong> {{ order.code }}</p>
-        <p><strong>Date:</strong> {{ order.placed_at|date:"d M Y, H:i" }}</p>
-    </div>
+    <h1>Order Invoice</h1>
+    <p><strong>Order Code:</strong> {{ order.code }}</p>
+    <p><strong>Customer:</strong> {{ order.first_name }} {{ order.last_name }}</p>
+    <p><strong>Date:</strong> {{ order.created_at }}</p>
 
-    <table class="details">
-        <tr>
-            <td><strong>Customer Name:</strong> {{ order.first_name }} {{ order.last_name }}</td>
-            <td><strong>Phone:</strong> {{ order.phone }}</td>
-        </tr>
-        <tr>
-            <td colspan="2"><strong>Shipping Address:</strong> 
-                {{ order.house_no }}, {{ order.street }}, 
-                {{ order.city }}, {{ order.state }} - {{ order.pin }}
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Total Items:</strong> {{ order_products|length }}</td>
-            <td><strong>Grand Total:</strong> {{ order.total|floatformat:2 }} ₸</td>
-        </tr>
-    </table>
-
-    <table class="products">
+    <h3>Order Details:</h3>
+    <table>
         <thead>
             <tr>
                 <th>Product</th>
                 <th>Quantity</th>
-                <th>Price (₸)</th>
-                <th>Total (₸)</th>
+                <th>Price</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
             {% for product in order_products %}
             <tr>
-                <td>{{ product.product.product_name }}</td>
+                <td>{{ product.product.name }}</td>
                 <td>{{ product.qty }}</td>
-                <td>{{ product.price|floatformat:2 }}</td>
-                <td>{{ product.amount|floatformat:2 }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.amount }}</td>
             </tr>
             {% endfor %}
+            <tr>
+                <td colspan="3" class="total">Total</td>
+                <td>{{ total }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total">Discount</td>
+                <td>{{ discount }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total">Grand Total</td>
+                <td>{{ grand_total }}</td>
+            </tr>
         </tbody>
     </table>
-
-    <div class="total">
-        <p>Grand Total: <strong>{{ order.total|floatformat:2 }} ₸</strong></p>
-    </div>
 </body>
 </html>

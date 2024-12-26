@@ -151,6 +151,13 @@
         border-top: none;
     }
 }
+
+.profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
     </style>
 
 </head>
@@ -182,11 +189,11 @@
                             {% if user.id %}
                             <li class="dropdown">
                                 <a href="/account" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                    <!-- {% if customer.profile_picture and customer.profile_picture.url %}
-    <img src="{{ customer.profile_picture.url }}" alt="Profile Picture">
-{% else %}
-    <img src="{% static 'userimg.png' %}" alt="Default Profile Picture">
-{% endif %} -->
+                                    {% if customer.profile_picture and customer.profile_picture.url %}
+                                        <img src="{% static 'images/userimg.png' %}" alt="Default Profile Picture" class="profile-image">
+                                    {% else %}
+                                        <img src="{{ customer.profile_pic.url }}" alt="Profile Picture" class="profile-image">
+                                    {% endif %}
                                     <span class="pl-2">{{user.first_name}} {{user.last_name}}</span>
                                    
                                 </a>
